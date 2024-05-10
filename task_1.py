@@ -1,23 +1,32 @@
 import os
 from functools import wraps
 import logging
-logging.basicConfig(level=logging.INFO, filename="main.log", filemode="w",
-                    format="%(asctime)s %(levelname)s %(message)s")
+
+
+
 
 
 def logger(old_function):
-
+    logging.basicConfig(level=logging.INFO, filename='main.log', filemode="w",
+                        format="%(asctime)s %(levelname)s %(message)s")
     @wraps(old_function)
     def new_function(*args, **kwargs):
-        logging.info(f'Будет вызвана функция - {old_function.__name__}'
-                     f'с аргументами: {args} и {kwargs}')
+        logging.info(f'Будет вызвана функция: {old_function.__name__},'
+                     f' с аргументами: {args} и {kwargs}')
+        result = old_function(*args, **kwargs)
+        logging.info(f'Возвращен результат: {result}')
+        return result
 
     return new_function
+
+
+
 
 
 def test_1():
     path = 'main.log'
     if os.path.exists(path):
+        pass
         os.remove(path)
 
     @logger
